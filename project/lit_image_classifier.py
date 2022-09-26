@@ -70,8 +70,10 @@ def cli_main():
     # args
     # ------------
     parser = ArgumentParser()
-    parser.add_argument('--batch_size', default=32, type=int)
+    parser.add_argument('--batch_size', type=int, default=32)
     parser.add_argument('--hidden_dim', type=int, default=128)
+    parser.add_argument('--max_epochs_number', type=int, default=20)
+    parser.add_argument('--fast_dev_run_enabled', type=bool, default=True)
     parser = pl.Trainer.add_argparse_args(parser)
     parser = LitClassifier.add_model_specific_args(parser)
     args = parser.parse_args()
@@ -95,6 +97,8 @@ def cli_main():
     # ------------
     # training
     # ------------
+    args.fast_dev_run = args.fast_dev_run_enabled
+    args.max_epochs = args.max_epochs_number
     trainer = pl.Trainer.from_argparse_args(args)
     trainer.fit(model, train_loader, val_loader)
 
