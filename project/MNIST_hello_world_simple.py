@@ -1,9 +1,6 @@
 import os
 
-import pandas as pd
-import seaborn as sn
 import torch
-from IPython.core.display import display
 from pytorch_lightning import LightningModule, Trainer
 from pytorch_lightning.callbacks.progress import TQDMProgressBar
 from pytorch_lightning.loggers import CSVLogger
