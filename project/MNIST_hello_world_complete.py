@@ -116,6 +116,12 @@ class LitMNIST(LightningModule):
     def test_dataloader(self):
         return DataLoader(self.mnist_test, batch_size=BATCH_SIZE)
 
+def gpu_available():
+    if torch.cuda.is_available() or torch.backends.mps.is_available():
+        return True
+    else:
+        return False
+
 def cli_main():
     # ------------
     # model
@@ -127,7 +133,7 @@ def cli_main():
     # ------------
     trainer = Trainer(
         accelerator="auto",
-        devices=1 if torch.cuda.is_available() else None,  # limiting got iPython runs
+        devices=1 if gpu_available() else None,
         max_epochs=3,
         callbacks=[TQDMProgressBar(refresh_rate=20)],
         logger=CSVLogger(save_dir="logs/"),
