@@ -36,6 +36,9 @@ class LitMNIST(LightningModule):
             ]
         )
 
+        # DataLoader parameters
+        self.num_workers = 8
+
         # Define PyTorch model
         self.model = nn.Sequential(
             nn.Flatten(),
@@ -108,13 +111,13 @@ class LitMNIST(LightningModule):
             self.mnist_test = MNIST(self.data_dir, train=False, transform=self.transform)
 
     def train_dataloader(self):
-        return DataLoader(self.mnist_train, batch_size=BATCH_SIZE)
+        return DataLoader(self.mnist_train, batch_size=BATCH_SIZE, num_workers=self.num_workers)
 
     def val_dataloader(self):
-        return DataLoader(self.mnist_val, batch_size=BATCH_SIZE)
+        return DataLoader(self.mnist_val, batch_size=BATCH_SIZE, num_workers=self.num_workers)
 
     def test_dataloader(self):
-        return DataLoader(self.mnist_test, batch_size=BATCH_SIZE)
+        return DataLoader(self.mnist_test, batch_size=BATCH_SIZE, num_workers=self.num_workers)
 
 def gpu_available():
     if torch.cuda.is_available() or torch.backends.mps.is_available():
