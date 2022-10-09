@@ -19,6 +19,7 @@ class LitMNIST(LightningModule):
     def __init__(self, data_dir=PATH_DATASETS, hidden_size=64, learning_rate=2e-4):
 
         super().__init__()
+        self.save_hyperparameters()
 
         # Set our init args as class attributes
         self.data_dir = data_dir
