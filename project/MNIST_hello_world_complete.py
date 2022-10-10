@@ -3,7 +3,7 @@ import os
 import torch
 from pytorch_lightning import LightningModule, Trainer
 from pytorch_lightning.callbacks.progress import TQDMProgressBar
-from pytorch_lightning.loggers import CSVLogger
+from pytorch_lightning.loggers import CSVLogger, TensorBoardLogger
 from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader, random_split
@@ -135,12 +135,16 @@ def cli_main():
     # ------------
     # training
     # ------------
+    logger = [
+        CSVLogger(save_dir="logs/"),
+        TensorBoardLogger(log_graph=True, save_dir='./')
+    ]
     trainer = Trainer(
         accelerator="auto",
         devices=1 if gpu_available() else None,
-        max_epochs=3,
+        max_epochs=100,
         callbacks=[TQDMProgressBar(refresh_rate=20)],
-        logger=CSVLogger(save_dir="logs/"),
+        logger=logger,
     )
     trainer.fit(model)
 
