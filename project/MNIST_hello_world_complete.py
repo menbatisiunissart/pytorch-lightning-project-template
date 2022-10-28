@@ -3,6 +3,7 @@ import os
 import torch
 from pytorch_lightning import LightningModule, Trainer
 from pytorch_lightning.callbacks.progress import TQDMProgressBar
+from pytorch_lightning.callbacks import LearningRateMonitor
 from pytorch_lightning.loggers import CSVLogger, TensorBoardLogger
 from torch import nn
 from torch.nn import functional as F
@@ -139,11 +140,15 @@ def cli_main():
         CSVLogger(save_dir="logs/"),
         TensorBoardLogger(log_graph=True, save_dir='./')
     ]
+    callbacks=[
+        TQDMProgressBar(refresh_rate=20),
+        LearningRateMonitor()
+    ]
     trainer = Trainer(
         accelerator="auto",
         devices=1 if gpu_available() else None,
-        max_epochs=100,
-        callbacks=[TQDMProgressBar(refresh_rate=20)],
+        max_epochs=3,
+        callbacks=callbacks,
         logger=logger,
     )
     trainer.fit(model)
